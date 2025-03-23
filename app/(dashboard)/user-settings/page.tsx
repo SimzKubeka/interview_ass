@@ -1,11 +1,11 @@
 'use client'
 
-import { useForm, useWatch } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { USER, FACILITIES } from '@/lib/constants'
+import { FACILITIES } from '@/lib/constants'
 
 // Extended schema
 const userSettingsSchema = z.object({
@@ -20,6 +20,10 @@ const userSettingsSchema = z.object({
 
 type UserSettingsFormData = z.infer<typeof userSettingsSchema>
 
+// Our facility objects might look like:
+// { name: 'Cape Town Practice', tel: '123-4567', manager: 'Alice' }
+// Make sure your constants have those fields if you want them auto-populated.
+
 export default function UserSettingsPage() {
   const [submitted, setSubmitted] = useState(false)
 
@@ -32,31 +36,45 @@ export default function UserSettingsPage() {
     setValue,
   } = useForm<UserSettingsFormData>({
     resolver: zodResolver(userSettingsSchema),
+    // Start with all blank/empty. We'll load actual values from localStorage in useEffect.
     defaultValues: {
-      name: USER.name,
-      email: USER.email,
+      name: '',
+      email: '',
       phoneNumber: '',
       occupation: '',
-      // Start with user's facility or blank
-      facility: USER.facility ?? '',
-      // Start blank (or user defaults) for phone/manager
+      facility: '',
       facilityPhone: '',
       facilityManager: '',
     },
   })
 
+  // Load the user from localStorage on mount
+  useEffect(() => {
+    const storedUser = localStorage.getItem('app-user')
+    if (storedUser) {
+      const parsed = JSON.parse(storedUser)
+      // Populate form fields with user data
+      setValue('name', parsed.name || '')
+      setValue('email', parsed.email || '')
+      // If you stored phoneNumber/occupation for user, set them here too:
+      setValue('phoneNumber', parsed.phoneNumber || '')
+      setValue('occupation', parsed.occupation || '')
+      setValue('facility', parsed.facility || '')
+    }
+  }, [setValue])
+
   // Watch the selected facility name
   const watchFacility = watch('facility')
 
-  // Each time facility changes, find that facility's details
+  // Each time facility changes, find that facility's details and auto-update
   useEffect(() => {
     const selectedFacility = FACILITIES.find((f) => f.name === watchFacility)
     if (selectedFacility) {
-      // Auto-update phone & manager fields to match the selected facility
+      // Auto-update phone & manager fields
       setValue('facilityPhone', selectedFacility.tel ?? '')
       setValue('facilityManager', selectedFacility.manager ?? '')
     } else {
-      // If no facility (or invalid), reset to blank
+      // If no facility or invalid, reset to blank
       setValue('facilityPhone', '')
       setValue('facilityManager', '')
     }
@@ -67,6 +85,9 @@ export default function UserSettingsPage() {
     console.log('User settings updated:', data)
     setSubmitted(true)
     setTimeout(() => setSubmitted(false), 3000)
+
+    // Optionally, store updated info back in localStorage:
+    localStorage.setItem('app-user', JSON.stringify(data))
   }
 
   return (
@@ -74,7 +95,7 @@ export default function UserSettingsPage() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
-      className="max-w-3xl w-full "
+      className="max-w-3xl w-full mt-10"
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         {/* Basic Info Card */}
@@ -147,7 +168,7 @@ export default function UserSettingsPage() {
                 id="occupation"
                 type="text"
                 {...register('occupation')}
-                className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm  sm:text-sm"
+                className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
               />
               {errors.occupation && (
                 <p className="text-sm text-red-500 mt-1">{errors.occupation.message}</p>
@@ -163,7 +184,7 @@ export default function UserSettingsPage() {
             <select
               id="facility"
               {...register('facility')}
-              className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm  sm:text-sm"
+              className="mt-1 p-2 block w-full rounded-md border-gray-300 shadow-sm sm:text-sm"
             >
               <option value="">-- Select a facility --</option>
               {FACILITIES.map((f) => (

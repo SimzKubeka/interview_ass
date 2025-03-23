@@ -33,21 +33,24 @@ export default function LoginPage() {
     },
   })
 
-  const onLogin = (data: LoginFormData) => {
-    // 1) Check if user is in ALLOWED_USERS
-    const match = ALLOWED_USERS.find(
-      (u) => u.email === data.email && u.password === data.password
-    )
+  // login page snippet
+const onLogin = (data: LoginFormData) => {
+  // Find matching user from ALLOWED_USERS
+  const match = ALLOWED_USERS.find(
+    (u) => u.email === data.email && u.password === data.password
+  )
 
-    if (!match) {
-      // 2) If no match, show an error
-      setLoginError('Invalid email or password')
-      return
-    }
-
-    // 3) If match, redirect to /dashboard
-    router.push('/dashboard')
+  if (!match) {
+    setLoginError('Invalid email or password')
+    return
   }
+  // Save user to localStorage
+  localStorage.setItem('app-user', JSON.stringify(match))
+
+  // Redirect
+  router.push('/dashboard')
+}
+
 
   return (
     <motion.section
