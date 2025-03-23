@@ -17,7 +17,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   return (
     <>
       {/* ✅ Desktop Sidebar */}
-      <aside className="w-64 min-h-screen bg-white p-6 shadow-sm hidden md:block">
+      <aside className="w-64 h-screen sticky top-0 bg-white p-6 shadow-sm hidden md:block">
       <div className="flex justify-between items-center mb-6">
               <Link href="/">
                 <Image

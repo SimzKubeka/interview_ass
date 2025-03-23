@@ -46,7 +46,7 @@ export default function Navbar() {
 
   return (
     <>
-    <nav className="bg-white shadow-sm p-4 flex justify-between lg:justify-end items-center relative z-20">
+    <nav className="bg-white shadow-sm p-4 flex justify-between md:justify-end items-center sticky top-0 z-30">
       {/* Hamburger for mobile */}
       <button
         onClick={() => setMobileOpen(!mobileOpen)}
