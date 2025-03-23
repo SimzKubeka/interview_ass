@@ -1,0 +1,43 @@
+<svg
+  width="400"
+  height="300"
+  viewBox="0 0 400 300"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- Background circle -->
+  <circle cx="200" cy="150" r="130" fill="#F2F8FD" />
+
+  <!-- 4 -->
+  <path
+    d="M158 80H136V140H110V162H136V220H158V162H178V140H158V80Z"
+    fill="#3B82F6"
+  />
+
+  <!-- 0 -->
+  <circle cx="220" cy="150" r="20" stroke="#0EA5E9" stroke-width="8" />
+  <circle cx="220" cy="150" r="8" fill="#0EA5E9" />
+
+  <!-- 4 (flipped) -->
+  <path
+    transform="translate(250 300) rotate(180) translate(-250 -300)"
+    d="M248 220H270V160H296V138H270V80H248V138H228V160H248V220Z"
+    fill="#3B82F6"
+  />
+
+  <!-- small exclamation icon -->
+  <rect x="194" y="94" width="12" height="50" rx="6" fill="#F87171"/>
+  <circle cx="200" cy="160" r="6" fill="#F87171"/>
+
+  <!-- Optional text if you want it in the SVG (you can remove or style as needed) -->
+  <text
+    x="200"
+    y="280"
+    text-anchor="middle"
+    fill="#64748B"
+    font-size="16"
+    font-family="Arial, sans-serif"
+  >
+    Oops! Page not found
+  </text>
+</svg>
