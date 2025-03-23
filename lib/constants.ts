@@ -9,6 +9,14 @@ import {
   LightBulbIcon,
   HeartIcon,
   BuildingOffice2Icon,
+  CodeBracketIcon,
+  CloudIcon,
+  CpuChipIcon,
+  PaintBrushIcon,
+  RocketLaunchIcon,
+  AdjustmentsHorizontalIcon,
+  BookOpenIcon,
+  ChartPieIcon,
 } from '@heroicons/react/24/outline'
 
 export const APP_NAME = 'My Fertility Journey'
@@ -157,3 +165,79 @@ export const ALLOWED_USERS = [
   },
 ]
 
+// Define a typed interface for each tech item
+interface TechItem {
+  name: string
+  icon: React.ElementType
+  description: string
+  useCase: string
+}
+
+// We'll create a partial list of the main libs from package.json
+// For simplicity, not every dev-dep is included here.
+export const TECH_STACK: TechItem[] = [
+  {
+    name: 'Next.js 15',
+    icon: RocketLaunchIcon,
+    description:
+      'A React framework for building performant, production-ready applications. Includes the new App Router for flexible routing.',
+    useCase:
+      'Core framework for SSR/SSG, routing, API routes, and overall project structure.',
+  },
+  {
+    name: 'React 19',
+    icon: CpuChipIcon,
+    description:
+      'A JavaScript library for building user interfaces, used in synergy with Next.js.',
+    useCase:
+      'Provides the component-based UI foundation and rendering logic.',
+  },
+  {
+    name: 'TypeScript',
+    icon: CodeBracketIcon,
+    description:
+      'A typed superset of JavaScript that helps catch errors during development and boosts maintainability.',
+    useCase:
+      'Used for static type-checking throughout the code, ensuring reliability.',
+  },
+  {
+    name: 'Tailwind CSS',
+    icon: PaintBrushIcon,
+    description:
+      'A utility-first CSS framework that accelerates styling with consistent design patterns.',
+    useCase:
+      'Enables rapid UI development with responsive breakpoints and design tokens.',
+  },
+  {
+    name: 'Framer Motion',
+    icon: CloudIcon,
+    description:
+      'A production-ready motion library for React, powering smooth animations and transitions.',
+    useCase:
+      'Adds subtle interactive animations to InfoCards, tables, modals, etc.',
+  },
+  {
+    name: 'Chart.js + React-Chartjs-2',
+    icon: ChartPieIcon,
+    description:
+      'Chart.js is a flexible charting library; React-Chartjs-2 integrates it into React.',
+    useCase:
+      'Visualize data in InfoChart components with doughnut charts and more.',
+  },
+  {
+    name: 'React Hook Form + Zod',
+    icon: BookOpenIcon,
+    description:
+      'Lightweight form handling with schema-based validation for robust, typed forms.',
+    useCase:
+      'Build and validate user inputs (login, settings) with minimal re-renders.',
+  },
+  {
+    name: 'clsx',
+    icon: AdjustmentsHorizontalIcon,
+    description:
+      'A tiny utility for constructing className strings conditionally.',
+    useCase:
+      'Keeps component markup clean when toggling classes in React elements.',
+  },
+]
