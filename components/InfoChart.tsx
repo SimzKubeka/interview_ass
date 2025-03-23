@@ -35,16 +35,16 @@ export default function InfoChart({ label, value, color }: InfoChartProps) {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center w-40">
+    <div className="flex flex-row items-center justify-center w-40">
       <div className="relative w-24 h-24">
         <Doughnut data={chartData} options={options} />
         <div className="absolute inset-0 flex items-center justify-center text-sm font-semibold">
           {value}%
         </div>
       </div>
-      <div className="text-center mt-2">
+      <div className="text-center text-nowrap ml-2">
         <p className="text-lg font-semibold">{value}%</p>
-        <p className="text-gray-500 text-sm">{label}</p>
+        <p className="text-gray-600 text-sm">{label}</p>
       </div>
     </div>
   )

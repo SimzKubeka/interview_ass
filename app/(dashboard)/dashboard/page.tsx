@@ -2,6 +2,7 @@
 
 import InfoCard from "@/components/InfoCard";
 import InfoChart from "@/components/InfoChart";
+import InfoTable from "@/components/InfoTable";
 import {
   UserGroupIcon,
   ClipboardDocumentCheckIcon,
@@ -29,6 +30,10 @@ export default function DashboardPage() {
         <InfoChart label="Pending" value={24} color="#FB923C" />
         <InfoChart label="Registered" value={56} color="#22C55E" />
         <InfoChart label="Post Treatment" value={20} color="#3B82F6" />
+      </div>
+
+      <div className="flex flex-wrap justify-around gap-6 bg-white rounded-xl shadow-soft mt-10">
+        <InfoTable /> 
       </div>
 
     </section>
