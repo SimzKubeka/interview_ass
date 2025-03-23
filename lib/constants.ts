@@ -140,3 +140,14 @@ export const FACILITIES = [
   },
 ]
 
+export const ALLOWED_USERS = [
+  {
+    email: 'adrian@mrfertility.co.za',
+    password: 'secret123',
+  },
+  {
+    email: 'jane@clinic.org',
+    password: 'password',
+  },
+]
+
