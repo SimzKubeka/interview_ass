@@ -1,38 +1,63 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   BellIcon,
   TrashIcon,
   ChevronDownIcon,
+  Bars3Icon
 } from '@heroicons/react/24/outline'
-
-const notifications = [
-  {
-    title: 'New Registration',
-    user: 'Alex Fredricks',
-    date: '07 Oct 2022',
-    avatar: '/avatar1.jpg',
-  },
-  {
-    title: 'New Consent Added',
-    user: 'Blake Robertson',
-    date: '07 Oct 2022',
-    avatar: '/avatar2.jpg',
-  },
-]
+import { NOTIFICATIONS as initialNotifications } from '@/lib/constants'
+import Sidebar from '@/components/Sidebar'
 
 export default function Navbar() {
   const [notifOpen, setNotifOpen] = useState(false)
   const [profileOpen, setProfileOpen] = useState(false)
+  const [notifications, setNotifications] = useState(initialNotifications)
+  const [mobileOpen, setMobileOpen] = useState(false)
+
+  const notifRef = useRef<HTMLDivElement | null>(null)
+  const profileRef = useRef<HTMLDivElement | null>(null)
+
+  const handleDelete = (index: number) => {
+    const updated = [...notifications]
+    updated.splice(index, 1)
+    setNotifications(updated)
+  }
+
+  const handleClearAll = () => {
+    setNotifications([])
+  }
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (notifRef.current && !notifRef.current.contains(event.target as Node)) {
+        setNotifOpen(false)
+      }
+
+      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+        setProfileOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   return (
-    <nav className="bg-white shadow-sm p-4 flex justify-between items-center relative z-20">
-      <div />
+    <>
+    <nav className="bg-white shadow-sm p-4 flex justify-between lg:justify-end items-center relative z-20">
+      {/* Hamburger for mobile */}
+      <button
+        onClick={() => setMobileOpen(!mobileOpen)}
+        className="md:hidden text-gray-700 hover:text-gray-900"
+      >
+        <Bars3Icon className="w-6 h-6" />
+      </button>
 
       <div className="flex items-center gap-6 relative">
-        {/* Notification Icon */}
-        <div className="relative">
+        {/* 🔔 Notification Dropdown */}
+        <div className="relative" ref={notifRef}>
           <button
             onClick={() => {
               setNotifOpen(!notifOpen)
@@ -41,21 +66,30 @@ export default function Navbar() {
             className="relative text-gray-700 hover:text-gray-900 transition"
           >
             <BellIcon className="w-6 h-6" />
-            <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
-              2
-            </span>
+            {notifications.length > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                {notifications.length}
+              </span>
+            )}
           </button>
 
           {notifOpen && (
-            <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-lg overflow-hidden">
-              <div className="p-4 border-b">
+            <div className="absolute right-0 mt-2 w-80 max-w-xs bg-white rounded-xl shadow-lg overflow-hidden z-30">
+              <div className="p-4 border-b border-gray-300">
                 <h3 className="font-semibold">Notifications</h3>
-                <p className="text-sm text-gray-500">You have 2 unread messages</p>
+                <p className="text-sm text-gray-500">
+                  {notifications.length > 0
+                    ? `You have ${notifications.length} unread message(s)`
+                    : 'No new notifications'}
+                </p>
               </div>
 
               <ul>
                 {notifications.map((n, i) => (
-                  <li key={i} className="flex items-start gap-4 p-4 border-b">
+                  <li
+                    key={i}
+                    className="flex items-start gap-4 p-4 border-b border-gray-300"
+                  >
                     <img
                       src={n.avatar}
                       alt={n.user}
@@ -66,20 +100,28 @@ export default function Navbar() {
                       <p className="text-sm text-gray-500">{n.user}</p>
                       <p className="text-xs text-gray-400 mt-1">🕒 {n.date}</p>
                     </div>
-                    <TrashIcon className="w-5 h-5 text-gray-400 hover:text-red-500 cursor-pointer" />
+                    <TrashIcon
+                      onClick={() => handleDelete(i)}
+                      className="w-5 h-5 text-gray-400 hover:text-red-500 cursor-pointer"
+                    />
                   </li>
                 ))}
               </ul>
 
-              <div className="p-3 text-center text-sm text-sky-600 hover:underline cursor-pointer">
-                Clear All
-              </div>
+              {notifications.length > 0 && (
+                <div
+                  className="p-3 text-center text-sm text-sky-600 hover:underline cursor-pointer"
+                  onClick={handleClearAll}
+                >
+                  Clear All
+                </div>
+              )}
             </div>
           )}
         </div>
 
-        {/* User Profile Dropdown */}
-        <div className="relative">
+        {/* 👤 Profile Dropdown */}
+        <div className="relative" ref={profileRef}>
           <button
             onClick={() => {
               setProfileOpen(!profileOpen)
@@ -90,12 +132,12 @@ export default function Navbar() {
             <div className="w-9 h-9 rounded-full bg-[#67ADB914] text-[#578388] font-semibold flex items-center justify-center">
               AS
             </div>
-            <p className="text-sm font-medium text-gray-700">Adrian Stefan</p>
+            <p className="text-sm font-medium text-gray-700 hidden lg:inline">Adrian Stefan</p>
             <ChevronDownIcon className="w-4 h-4 text-gray-500" />
           </button>
 
           {profileOpen && (
-            <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl overflow-hidden">
+            <div className="absolute right-0 mt-2 w-64 max-w-xs bg-white rounded-xl shadow-xl overflow-hidden z-30">
               <div className="p-4 border-b border-gray-300">
                 <p className="font-semibold">Adrian Stefan</p>
                 <p className="text-sm text-gray-500">adrian@mrfertility.co.za</p>
@@ -113,5 +155,10 @@ export default function Navbar() {
         </div>
       </div>
     </nav>
+    {/* Mobile Sidebar */}
+    {mobileOpen && (
+      <Sidebar isOpen={mobileOpen} onClose={() => setMobileOpen(false)} />
+    )}
+    </>
   )
 }
