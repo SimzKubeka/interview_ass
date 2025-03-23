@@ -3,10 +3,10 @@
 import { Switch } from '@headlessui/react'
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
-import { DASHBOARD_TABLE as sampleData } from '@/lib/constants'
+import { FACILITIES as sampleData } from '@/lib/constants'
 import { motion, AnimatePresence } from 'framer-motion'
 
-export default function InfoTable() {
+export default function ManageInfoTable() {
   const [tableData, setTableData] = useState(sampleData)
 
   const toggleStatus = (index: number) => {
@@ -16,9 +16,9 @@ export default function InfoTable() {
   }
 
   return (
-    <div className="bg-white w-full rounded-xl shadow-soft p-6">
+    <div className="bg-white w-full rounded-xl shadow-soft mt-10 p-6">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Newest Practises</h2>
+        <h2 className="text-xl font-semibold">Manage Practises</h2>
       </div>
 
       {/* 🖥️ Desktop Table */}
@@ -124,16 +124,7 @@ export default function InfoTable() {
         </AnimatePresence>
       </div>
 
-      <hr className="my-4 border-gray-300" />
-      <div className="w-full flex justify-end mt-4">
-        <a
-          href="/manage-facilities"
-          className="text-sm text-blue-600 hover:underline flex items-center gap-1"
-        >
-          See All
-          <span className="text-lg">→</span>
-        </a>
-      </div>
+      
     </div>
   )
 }
